@@ -2,3 +2,4 @@ node_modules
 .env
 deploy-commands
 remove-global-commands
+eslint.config
