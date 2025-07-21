@@ -3,12 +3,19 @@ const { SlashCommandBuilder } = require('discord.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('userinfo')
-        .setDescription('Provides information about the user.'),
+        .setDescription('Provides information about a user.')
+        .addUserOption(option =>
+            option.setName('user')
+                .setDescription('user whose information to fetch.')
+                .setRequired(true)),
     async execute(interaction) {
-        // interaction.user is the object representing the User who ran the command
-        // interaction.member is the GuildMember object, which represents the user in the specific guild
-        await interaction.reply(`This command was run by ${interaction.user.username}, who joined on ${interaction.member.joinedAt}.`);
+        const user = interaction.options.getUser('user');
+        const member = await interaction.guild.members.fetch(user.id);
+
+        const username = user.globalName;
+        const at = user.username;
+        const joinTime = member.joinedAt;
+
+        await interaction.reply(`${username} (@${at}), joined the server at ${joinTime}`);
     },
 };
-
-// make sure to enable complete blank to chose user!!
